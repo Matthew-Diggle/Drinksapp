@@ -208,5 +208,5 @@ if __name__ == "__main__":
             descriptions.all_properties()
             wait()
         elif selection == EXIT_ARG:
-            data_save()
-            exit1()
+            # data_save()
+            # exit1()
