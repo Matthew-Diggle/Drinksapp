@@ -1,7 +1,6 @@
 class Drink:
     def __init__(self, name, temp, carbonated):
         self.name = name
-        self.age = 27
         self.temp = temp
         self.carbonated = carbonated
     #def is_carbonated():
@@ -12,7 +11,7 @@ class Drink:
         soft_drink = "a soft drink"
         if not self.carbonated:
             soft_drink = "not a soft drink"
-        print(f'{self.name} is {soft_drink} drink, served {self.temp}.')
+        print(f'{self.name} is {soft_drink}, served {self.temp}.')
 
 
 class Tea(Drink):

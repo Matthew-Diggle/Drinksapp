@@ -4,7 +4,7 @@ import os
 # # can also use from 'filename' import 'function'
 import table
 import descriptions
-from Add_people_drink import add_people, add_drink, new_drink, new_name, people, drinks
+from Add_people_drink import add_people, add_drink, new_drink, new_name, people, drinks, WELCOME, welcome_screen
 args = sys.argv
 
 # Define data
@@ -25,30 +25,29 @@ EXIT_ARG = "0"
 Preferences = {}
 # Max_len_list = 16
 # """ """ used for multi-line strings instead of multiple print lines
-WELCOME = """Welcome to BrewApp v0.1!
-Please select an option from the list: 
+# WELCOME = """Welcome to BrewApp v0.1!
+# Please select an option from the list: 
 
-[1] Get all people 
-[2] Get all drinks 
-[3] Add people
-[4] Add drinks
-[5] Show all drinks
-[6] Select your favourite drink
-[7] See Preferences
-[8] Predefined drinks list descriptions
-[0] Exit 
-"""
+# [1] Get all people 
+# [2] Get all drinks 
+# [3] Add people
+# [4] Add drinks
+# [5] Show all drinks
+# [6] Select your favourite drink
+# [7] See Preferences
+# [8] Predefined drinks list descriptions
+# [0] Exit 
+# """
 
 # File paths
 
 DRINKS_FILE = "Drinks.txt"
 NAME_FILE = "Names.txt"
 CSV_FILE = "Favourites.csv"
-def welcome_screen():
-    print(WELCOME)
+# def welcome_screen():
+#     print(WELCOME)
 
 def show_drinks(title, drinks):
-    drinks = []
     for i, drink in enumerate(drinks, start=1):
         drinks.append(f'[{i}] {drinks}')
     print(f'{title}\n')
@@ -109,19 +108,32 @@ import csv
 
 def load_favourites():
     csv_columns = ["Name", "Drink"]
-    Preferences = [{"John": "Pepsi", "Melissa": "Tea"}]
+    Preferences
     try:
-        with open("CSV_FILE", "w") as f:
-            csv_writer = csv.DictWriter(f, fieldnames=csv_columns)
+        with open("CSV_FILE", "w") as file:
+            csv_writer = csv.writerow(file, fieldnames=csv_columns)
             csv_writer.writeheader()
-            for data in dict:
+            for data in Preferences:
                 csv_writer.writerow(data)
     except TypeError:
         print("There was a TypeError")
 
 
+# def load_favourites():
+#     csv_columns = ["Name", "Drink"]
+#     Preferences = {"John": "Pepsi", "Melissa": "Tea"}
+#     try:
+#         with open("CSV_FILE", "w") as f:
+#             csv_writer = csv.DictWriter(f, fieldnames=csv_columns)
+#             csv_writer.writeheader()
+#             for data in pref:
+#                 csv_writer.writerow(data)
+#     except TypeError:
+#         print("There was a TypeError")
 
-    # for item in Preferences(FAVOURITES_FILE):
+
+
+    # for item in Preferences(CSV_FILE):
     #     # Unpacking the items in the list to separate variables
     #     # https://treyhunner.com/2018/03/tuple-unpacking-improves-python-code-readability/
     #     # I know items.split will return a list with two items, because of the second argument
@@ -134,6 +146,14 @@ def load_favourites():
     #         print(f'Drink is known: {drink in drinks}')
     #         print(f'Name is known: {name in people}')
 
+# def load_favourites():
+#     try:
+#         with open(CSV_FILE, "r") as f:
+#             contents = f.read()
+#             dictionary = ast.literal_eval(contents)
+#         f.close()
+#         print(Preferences)
+
 def data_load():
     try:
         with open(NAME_FILE, "r") as f:
@@ -142,31 +162,23 @@ def data_load():
         with open(DRINKS_FILE, "r") as f:
             for name in f.readlines():
                 drinks.append(name.strip())
-        # load_favourites(people, drinks)
+        load_favourites()
     except FileNotFoundError:
         print("An error occured whilst finding this file. Please check that this file exists.")
         exit()
     except Exception as e:
         print(f'Unable to load data from "{NAME_FILE}" with error: {str(e)}')
 
-# def load_favourites():
-#     try:
-#         with open(FAVOURITES_FILE, "r") as f:
-#             contents = file.read()
-#             dictionary = ast.literal_eval(contents)
-#     file.close()
-#     print(Preferences)
-
 
 def data_save():
-        with open(NAME_FILE, "w") as file:
-            file.writelines([f'{name}\n' for name in people])
-        with open(DRINKS_FILE, "w") as file:
-            file.writelines([f'{drink}\n' for drink in drinks])
-        # with open("FAVOURITES_FILE.csv", "wb") as f:
-        #     w = csv.DictWriter(f, FAVOURITES_FILE.keys())
-        #     w.writeheader()
-        #     w.writerow(FAVOURITES_FILE)
+    with open(NAME_FILE, "w") as file:
+        file.writelines([f'{name}\n' for name in people])
+    with open(DRINKS_FILE, "w") as file:
+        file.writelines([f'{drink}\n' for drink in drinks])
+    # with open("CSV_FILE", "w") as f:
+    #     w = f.writelines([f]))
+    #     w.writeheader()
+    #     w.writerow(CSV_FILE)
 
 # def save_favourites():
 #     favourites = []
@@ -203,12 +215,12 @@ if __name__ == "__main__":
         elif selection == CHOOSE_FAVOURITE:
             choose_fave()
         elif selection == SEE_FAVOURITES:
-            load_favourites()
+            print_favourites()
         elif selection == DESCRIPTION:
             descriptions.all_properties()
-            wait()
+            table.wait()
         elif selection == EXIT_ARG:
-            # data_save()
-            # exit1()
+            data_save()
+            exit1()
 
 #testing merge
