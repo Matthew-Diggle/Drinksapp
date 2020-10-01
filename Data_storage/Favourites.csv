@@ -1,7 +1,0 @@
-preferences = {"John": Coke, "Melissa": Tea}
-
-file1 = open("Favourites.csv", "w")
-dict1 = {}
-writer = csv.writer(file1)
-for key, value in dict1.items():
-writer.writerow([key, value])

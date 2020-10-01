@@ -1,12 +1,12 @@
 import sys
 import os
-# import table #as print_table, print_header, print_separator, get_table_width, wait -- commented to import specific functions from file 
+# import table #as print_table, print_header, prpipint_separator, get_table_width, wait -- commented to import specific functions from file 
 # # can also use from 'filename' import 'function'
 import table
 import descriptions
 from Add_people_drink import add_people, add_drink, new_drink, new_name, people, drinks, WELCOME, welcome_screen
 args = sys.argv
-
+from csv import writer
 # Define data
 # Expected commands - In capitals so others know not to change these variables
 
@@ -106,31 +106,29 @@ def choose_fave():
 
 import csv
 
-def load_favourites():
-    csv_columns = ["Name", "Drink"]
-    Preferences
-    try:
-        with open("CSV_FILE", "w") as file:
-            csv_writer = csv.writerow(file, fieldnames=csv_columns)
-            csv_writer.writeheader()
-            for data in Preferences:
-                csv_writer.writerow(data)
-    except TypeError:
-        print("There was a TypeError")
-
-
 # def load_favourites():
 #     csv_columns = ["Name", "Drink"]
-#     Preferences = {"John": "Pepsi", "Melissa": "Tea"}
+#     Preferences
 #     try:
-#         with open("CSV_FILE", "w") as f:
-#             csv_writer = csv.DictWriter(f, fieldnames=csv_columns)
+#         with open("CSV_FILE", "w") as file:
+#             csv_writer = csv.writerow(file, fieldnames=csv_columns)
 #             csv_writer.writeheader()
-#             for data in pref:
+#             for data in Preferences:
 #                 csv_writer.writerow(data)
 #     except TypeError:
 #         print("There was a TypeError")
 
+
+def load_favourites():
+    csv_columns = ["Name", "Drink"]
+#    try:
+    with open("CSV_FILE", "a+", newline = "") as f:
+        csv_writer = writer(f, fieldnames=csv_columns)
+        csv_writer.writeheader()
+        for data in pref:
+            csv_writer.writerow(data)
+#   except TypeError:
+#        print("There was a TypeError")
 
 
     # for item in Preferences(CSV_FILE):
