@@ -6,7 +6,7 @@ import table
 import descriptions
 from Add_people_drink import add_people, add_drink, new_drink, new_name, people, drinks, WELCOME, welcome_screen
 args = sys.argv
-from csv import writer
+from csv import writer, reader
 # Define data
 # Expected commands - In capitals so others know not to change these variables
 
@@ -104,7 +104,6 @@ def choose_fave():
 #load/save data
 #Look at load_favourites
 
-import csv
 
 # def load_favourites():
 #     csv_columns = ["Name", "Drink"]
