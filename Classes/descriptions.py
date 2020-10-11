@@ -1,4 +1,4 @@
-class Drink:
+class Drink_properties:
     def __init__(self, name, temp, carbonated):
         self.name = name
         self.temp = temp
@@ -14,42 +14,42 @@ class Drink:
         print(f'{self.name} is {soft_drink}, served {self.temp}.')
 
 
-class Tea(Drink):
+class Tea(Drink_properties):
     def __init__(self, name):
         self.temp = "hot"
         self.carbonated = False
         super().__init__(name, self.temp, self.carbonated)
     def properties(self):
         super().properties()
-class Mocha(Drink):
+class Mocha(Drink_properties):
     def __init__(self, name):
         self.temp = "hot"
         self.carbonated = False
         super().__init__(name, self.temp, self.carbonated)
     def properties(self):
         super().properties()
-class Coffee(Drink):
+class Coffee(Drink_properties):
     def __init__(self, name):
         self.temp = "hot"
         self.carbonated = False
         super().__init__(name, self.temp, self.carbonated)
     def properties(self):
         super().properties()
-class Americano(Drink):
+class Americano(Drink_properties):
     def __init__(self, name):
         self.temp = "hot"
         self.carbonated = False
         super().__init__(name, self.temp, self.carbonated)
     def properties(self):
         super().properties()
-class Coke(Drink):
+class Coke(Drink_properties):
     def __init__(self, name):
         self.temp = "cold"
         self.carbonated = True
         super().__init__(name, self.temp, self.carbonated)
     def properties(self):
         super().properties()
-class Fanta(Drink):
+class Fanta(Drink_properties):
     def __init__(self, name):
         self.temp = "cold"
         self.carbonated = True

@@ -1,4 +1,4 @@
-import table
+import Src.table
 
 class Round:
     def __init__(self, owner_name):
@@ -12,8 +12,7 @@ class Round:
         items = []
         for name, drink, blend, temp in self.orders.items():
             items.append(f'{name} would like a {temp} {blend} {drink}' )
-
-        table.print_table(f"{self.owner}'s round", items)
+        Src.table.print_table(f"{self.owner}'s round", items)
 
 round = Round("Matthew")
 round.print_order()
