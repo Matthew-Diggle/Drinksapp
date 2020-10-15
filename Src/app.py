@@ -87,7 +87,7 @@ def add_preferences_to_db():
 	)
     cursor = connection.cursor()
     for i in key_list:
-        for x in value_list:
+        for x in value_list:p
             if i == key_list[-1] and x == value_list[-1]:
                 cursor.execute(f'INSERT INTO Preferences (Name, Drink) VALUES ("{i}", "{x}")')
                 connection.commit()

@@ -91,8 +91,6 @@ def add_new_drink_to_db():
 #     connection.close()
 
 
-
-
 people = data_load_persons()
 drink = data_load_drinks()
 # data_load()
