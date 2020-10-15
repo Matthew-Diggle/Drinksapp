@@ -4,6 +4,6 @@ class Drink:
         self.temp = temp
         self.blend = blend
         if self.temp == "":
-            self.temp == "Regular"
+            self.temp = "Regular"
         if self.blend == "":
-            self.blend == "Regular"
+            self.blend = "Regular"

@@ -1,0 +1,17 @@
+## Running the app
+    - From the root, run 'python -m Src.app'
+
+## Virtual Environment
+    - Create a venv with the command 'python -m venv .venv' and activate it with:
+        - 'source .venv/scripts/activate (windows users)
+        - 'source .venv/bin/activate) (mac users)
+    - Your shell should now say (.venv) under any command you input.
+    - To deactivate your venv, enter 'deactivate' within your shell
+
+## Requirements
+    - Once your venv is activated, run the command 'pip install -r Requirements.txt' from the root of your repo
+    - Updating Requirements:
+        With your venv active, run 'pip freeze > Requirements.txt' from the root of your project
+
+## Docker
+    - Ensure the docker container is running by running the command, 'docker compose up'

@@ -1,5 +1,8 @@
 import sys
 import os.path
+import collections
+import pymysql
+from prettytable import PrettyTable
 # can also use from 'filename' import 'function'
 from .table import print_table, print_header, print_separator, get_table_width
 from Classes.drink_class import Drink
@@ -23,11 +26,7 @@ SEE_FAVOURITES = "7"
 DESCRIPTION = "8"
 EXIT_ARG = "0"
 
-# people = []
-# drinks = []
 Preferences = {}
-# Max_len_list = 16
-# """ """ used for multi-line strings instead of multiple print lines
 WELCOME = """Welcome to BrewApp v0.1!
 Please select an option from the list: 
 
@@ -50,28 +49,98 @@ def welcome_screen():
 def wait():
     input("Press any key to return to menu")
 
-def show_drinks():
-    for i, drink in enumerate(drinks, start=1):
-        drinks.append(f'{i} {drink}')
-    print_table('Drinks', drinks)
+def boohoo_com(title, list_data):
+    t = PrettyTable()
+    t.field_names =['ID',title]
+    for i,x in enumerate (list_data, start=1):
+        t.add_row([i,x])
+    print(t)
 
-def print_train():
-    print('''                                             (@@@)     (@@@@@)
-                                       (@@)     (@@@@@@@)        (@@@@@@@)
-                                 (@@@@@@@)   (@@@@@)       (@@@@@@@@@@@)
-                            (@@@)     (@@@@@@@)   (@@@@@@)             (@@@)
-                       (@@@@@@)    (@@@@@@)                (@)
-                   (@@@)  (@@@@)           (@@)
-                (@@)              (@@@)
-               .-.               
-               ] [    .-.      _    .-----.
-        ."   """"   """""" """"| .--`
-         (:--:--:--:--:--:--:--:-| [___    .------------------------.
-    |C&O  :  :  :  :  :  : [_9_] |'='|.----------------------.|
-        /|.___________________________|___|'--.___.--.___.--.___.-'| 
-       / ||_.--.______.--.______.--._ |---\'--\-.-/==\-.-/==\-.-/-'/--
-      /__;^=(==)======(==)======(==)=^~^^^ ^^^^(-)^^^^(-)^^^^(-)^^^ jgs
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~''')
+def show_drinks():
+    boohoo_com("Drinks", unpack_Drink())
+
+def show_people():
+    boohoo_com("People", unpack_Person())
+
+def choose_fave():
+    show_people()
+    name = make_preference("Please enter your name, followed by your preferred drink! If your name is not in the list above, please return to the main menu to add your name.\n")
+    pref_drink = input()
+    Preferences[name] = pref_drink
+    global od
+    od = collections.OrderedDict(Preferences.items())
+    global key_list, value_list
+    key_list = []
+    value_list = []
+    for key, value in od.items():
+        key_list.append(key)
+        value_list.append(value)
+    add_preferences_to_db()
+
+def add_preferences_to_db():
+    connection = pymysql.connect(
+		host="localhost",
+    	port=33066,
+		user="root",
+		passwd="password",
+		database="Drink_app"
+	)
+    cursor = connection.cursor()
+    for i in key_list:
+        for x in value_list:
+            if i == key_list[-1] and x == value_list[-1]:
+                cursor.execute(f'INSERT INTO Preferences (Name, Drink) VALUES ("{i}", "{x}")')
+                connection.commit()
+                # cursor.execute(f'INSERT INTO Person (Name) VALUE ("{i}") WHERE "{i}" not in (Name))')
+                # connection.commit()
+    # for i in value_list:        
+    #     if i == value_list[-1]:
+    #         cursor.execute(f'UPDATE Preferences (Drink) VALUES ("{i}") WHERE (Name) ')
+    #         connection.commit()
+    cursor.close()
+    connection.close()
+
+def load_preferences_to_db():
+    connection = pymysql.connect(
+		host="localhost",
+    	port=33066,
+		user="root",
+		passwd="password",
+		database="Drink_app"
+	)
+    cursor = connection.cursor()
+    cursor.execute(f'SELECT * FROM Preferences')
+    while True:
+        data_info = cursor.fetchone()
+        if data_info == None:
+            break
+        Preferences[data_info[1]] = data_info[2]
+        connection.commit()
+    # for i in value_list:        
+    #     if i == value_list[-1]:
+    #         cursor.execute(f'UPDATE Preferences (Drink) VALUES ("{i}") WHERE (Name) ')
+    #         connection.commit()
+    cursor.close()
+    connection.close()
+
+
+# def print_train():
+#     print('''                                             (@@@)     (@@@@@)
+#                                        (@@)     (@@@@@@@)        (@@@@@@@)
+#                                  (@@@@@@@)   (@@@@@)       (@@@@@@@@@@@)
+#                             (@@@)     (@@@@@@@)   (@@@@@@)             (@@@)
+#                        (@@@@@@)    (@@@@@@)                (@)
+#                    (@@@)  (@@@@)           (@@)
+#                 (@@)              (@@@)
+#                .-.               
+#                ] [    .-.      _    .-----.
+#         ."   """"   """""" """"| .--`
+#          (:--:--:--:--:--:--:--:-| [___    .------------------------.
+#     |C&O  :  :  :  :  :  : [_9_] |'='|.----------------------.|
+#         /|.___________________________|___|'--.___.--.___.--.___.-'| 
+#        / ||_.--.______.--.______.--._ |---\'--\-.-/==\-.-/==\-.-/-'/--
+#       /__;^=(==)======(==)======(==)=^~^^^ ^^^^(-)^^^^(-)^^^^(-)^^^ jgs
+#     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~''')
 
 def make_selection(message):
     return input(f'{message} \n')
@@ -91,37 +160,29 @@ def unpack_Drink():
     Drink_list = [drinks.drink_name for drinks in drink]
     return Drink_list
 
+# def choose_fave():
+#     # for index, item in enumerate(data, start=1):
+#     #     print(f'[{index}], {item}')
+#     name = make_preference("Please enter your name, followed by your preferred drink! \n")
+#     pref_drink = input()
+#     Preferences[name] = pref_drink
+    # connection = pymysql.connect(
+	# 	host="localhost",
+    # 	port=33066,
+	# 	user="root",
+	# 	passwd="password",
+	# 	database="Drink_app"
+	# )
+    # cursor = connection.cursor()
+    # for key, value in Preferences.items():
+    #     if key == Preferences.keys()[-1]:
+    #         cursor.execute(f'INSERT INTO Preferences (Name, Drink) VALUES ({key}, {value}')
+    #         connection.commit()
+    #     cursor.close()
+    #     connection.close()
 
-# def add_people():
-#     addition = True 
-#     add_person = new_name("Please enter your name.")
-#     if len(people) <=  Max_len_list:
-#         people.append(add_person)
-#         addition = True
-#     while addition:
-#         add_more = input('Would you like to add a new person? Please type "Yes" or "No" \n')
-#         if add_more == "Yes":
-#             addition = True
-#         elif add_more == "No":
-#             addition = False
-#             break
-#         if len(people) >= Max_len_list:
-#             print("This app may only hold 16 names, please remove 1")
-#             addition = False
 
-# def add_drink():
-#     if len(drinks) <= Max_len_list:
-#         add_drink = new_drink("Please enter the drink you would like to add")
-#         drinks.append(add_drink)
-#     elif len(drinks) >= Max_len_list:
-#         print("This app may only hold 16 drinks, please remove 1")
-
-def choose_fave():
-    # for index, item in enumerate(data, start=1):
-    #     print(f'[{index}], {item}')
-    name = make_preference("Please enter your name, followed by your preferred drink! \n")
-    pref_drink = input()
-    Preferences[name] = pref_drink
+        
 
 #load/save data
 #Look at load_favourites
@@ -188,11 +249,11 @@ def choose_fave():
     #     print(f'Unable to load data from "{NAME_FILE}" with error: {str(e)}')
 
 
-def data_save():
-    with open(NAME_FILE, "w") as file:
-        file.writelines([f'{name}\n' for name in people])
-    with open(DRINKS_FILE, "w") as file:
-        file.writelines([f'{drink}\n' for drink in drinks])
+# def data_save():
+#     with open(NAME_FILE, "w") as file:
+#         file.writelines([f'{name}\n' for name in people])
+#     with open(DRINKS_FILE, "w") as file:
+#         file.writelines([f'{drink}\n' for drink in drinks])
     # with open("CSV_FILE", "w") as f:
     #     w = f.writelines([f]))
     #     w.writeheader()
@@ -204,33 +265,38 @@ def data_save():
 
 
 def start():
-    data_load()
+    load_preferences_to_db()
 
 def exit1():
-    data_save()
     print("Thankyou for using BrewApp")
     exit()
 
 # Start of app
-# start()
+start()
 if __name__ == "__main__":
     while True:
+        # print_train()
         welcome_screen()
         selection = make_selection("Choose your selection:")
         
 # Handle arguments
         if selection == GET_PEOPLE_ARGS:
-            print_table('People', unpack_Person())
+            #print_table('People', unpack_Person())
+            show_people()
+            wait()
         elif selection == GET_DRINKS_ARGS:
-            print_table('Drink', unpack_Drink())
+            #print_table('Drink', unpack_Drink())
+            show_drinks()
+            wait()
         elif selection == ADD_PEOPLE:
             add_people()
             wait()
         elif selection == ADD_DRINKS:
             add_drink()
             wait()
-        # elif selection == PLACE_ORDER:
-        #     #Round function
+        elif selection == PLACE_ORDER:
+            
+            wait()
         elif selection == CHOOSE_FAVOURITE:
             choose_fave()
             wait()
@@ -241,7 +307,6 @@ if __name__ == "__main__":
             all_properties()
             wait()
         elif selection == EXIT_ARG:
-            data_save()
             exit1()
 
 #testing merge
